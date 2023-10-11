@@ -10,7 +10,23 @@ class Task:
         
     def __str__(self):
         return f"{self.title}, {self.description}, {self.priority}, {self.due_date}"
-        
+
+#prompt user for input on what they want to do
+choice = input('Would you like to create, read, update, delete, sort or exit? (c/r/u/d/s/e)? ')
+match choice:
+    case "c":
+        print('create selected')
+    case "r":
+        print('read selected')
+    case "u":
+        print('update selected')
+    case "d":
+        print('delete selected')
+    case "s":
+        print('sort selected')
+    case _:
+        print('exit selected')
+    
 #create tasks
 
 #read tasks
