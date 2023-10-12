@@ -22,7 +22,7 @@ def prompt():
         case "r":
             read()
         case "u":
-            print('update selected')
+            update()
         case "d":
             print('delete selected')
         case "s":
@@ -37,25 +37,7 @@ def create():
     inputDescription = input("Please enter a description: ")
     inputPriority = input("Please enter a priority (1-5, 1 being highest, 5 being lowest): ")
     inputDueDate = input("Please enter a due date (MM/DD/YY): ")
-    month = inputDueDate[0:2]
-    day = inputDueDate[3:5]
-    year = inputDueDate[6:8]
-    #check if they entered stuff how we want
-    #if the title is left blank, return to menu
-    if(str(inputTitle) == None or str(inputTitle) == ""):
-        print("No title found, returning to main menu")
-        prompt()
-        #return   
-    #if the priority is less than 1, or more than 5, go back to main menu
-    elif((int(inputPriority) > 5 or int(inputPriority) < 1)):
-        print("Invalid priority entered, returning to main menu")
-        prompt()
-        return
-    #if the month is less than 1 or greater than 12, or the day is greater than 31 or less than 1, or the year is sooner than 2023 return to main menu
-    elif(int(month) > 12 or int(month) < 1 or int(day) > 31 or int(day) < 1 or int(year) < 23):
-        print("Invalid due date entered, return to main menu")
-        prompt()
-        return
+    check(inputTitle, inputPriority, inputDueDate)
     task = Task(inputTitle, inputDescription, inputPriority, inputDueDate)
     taskList.append(task)
     prompt()
@@ -101,7 +83,26 @@ def read():
             read()
             
 #update tasks
-
+def update():
+    taskToUpdate = input("Please enter the title of the task you would like to update: ")
+    try:
+        index = None
+        for task in taskList:
+            if(task.title == taskToUpdate):
+                index = taskList.index(task)
+        if(index != None):
+            updateTitle = input("Please enter a task title: ")
+            updateDescription = input("Please enter a description: ")
+            updatePriority = input("Please enter a priority (1-5, 1 being highest, 5 being lowest): ")
+            updateDueDate = input("Please enter a due date (MM/DD/YY): ")
+            check(updateTitle, updatePriority, updateDueDate)
+            updatedTask = Task(updateTitle, updateDescription, updatePriority, updateDueDate)
+            taskList[index] = updatedTask
+            prompt()
+    except:
+        print("Task not found")
+        prompt()
+        
 #delete tasks
 
 #sort by priority: high, low
@@ -113,6 +114,28 @@ def read():
 #save tasks to file
 
 #import tasks from file
+
+#check function for checking values entered for a task
+def check(inputTitle, inputPriority, inputDueDate):
+    month = inputDueDate[0:2]
+    day = inputDueDate[3:5]
+    year = inputDueDate[6:8]
+    #check if they entered stuff how we want
+    #if the title is left blank, return to menu
+    if(str(inputTitle) == None or str(inputTitle) == ""):
+        print("No title found, returning to main menu")
+        prompt()
+        return   
+    #if the priority is less than 1, or more than 5, go back to main menu
+    elif((int(inputPriority) > 5 or int(inputPriority) < 1)):
+        print("Invalid priority entered, returning to main menu")
+        prompt()
+        return
+    #if the month is less than 1 or greater than 12, or the day is greater than 31 or less than 1, or the year is sooner than 2023 return to main menu
+    elif(int(month) > 12 or int(month) < 1 or int(day) > 31 or int(day) < 1 or int(year) < 23):
+        print("Invalid due date entered, return to main menu")
+        prompt()
+        return
 
 #main code
 prompt()
