@@ -18,10 +18,9 @@ def prompt():
     choice = input('Would you like to create, read, update, delete, sort or exit? (c/r/u/d/s/e)? ')
     match choice:
         case "c":
-            print('create selected')
             create()
         case "r":
-            print('read selected')
+            read()
         case "u":
             print('update selected')
         case "d":
@@ -41,7 +40,6 @@ def create():
     month = inputDueDate[0:2]
     day = inputDueDate[3:5]
     year = inputDueDate[6:8]
-    print(year)
     #check if they entered stuff how we want
     #if the title is left blank, return to menu
     if(str(inputTitle) == None or str(inputTitle) == ""):
@@ -60,11 +58,48 @@ def create():
         return
     task = Task(inputTitle, inputDescription, inputPriority, inputDueDate)
     taskList.append(task)
-    print(taskList[0])
     prompt()
     
 #read tasks
-
+def read():
+    choice = input("Would you like to print all, or in a sorted format? (p/s) ")
+    match choice:
+        case "p":
+            for task in taskList:
+                print(task)
+            prompt()
+        case "s":
+            sort = input("Sort by title, priority, or due date? (t/p/d)" )
+            match sort:
+                case "t":
+                    print("Sort by title")
+                case "p":
+                    highLow = input("Sort by highest or lowest priority? (h/l) ")
+                    match highLow:
+                        case "h":
+                            print("Sort by high")
+                        case "l":
+                            print("Sort by low")
+                        case _:
+                            print("Invalid input")
+                            read()
+                case "d":
+                    oldNew = input("Sort by oldest or newest tasks? (o/n) ")
+                    match oldNew:
+                        case "o":
+                            print("Sort by oldest")
+                        case "n":
+                            print("Sort by newest")
+                        case _:
+                            print("Invalid input")
+                            read()
+                case _:
+                    print("Invalid input")
+                    read()
+        case _:
+            print("Invalid input")
+            read()
+            
 #update tasks
 
 #delete tasks
