@@ -24,7 +24,7 @@ def prompt():
         case "u":
             update()
         case "d":
-            print('delete selected')
+            delete()
         case "s":
             print('sort selected')
         case _:
@@ -104,7 +104,24 @@ def update():
         prompt()
         
 #delete tasks
-
+def delete():
+    toDelete = input("Please enter the name of the task you would like to delete: ")
+    if(toDelete == None or toDelete == ""):
+        print("Invalid task provided, returning to menu")
+        prompt()
+        return
+    else:
+        for task in taskList:
+            if(task.title == toDelete):
+                taskList.remove(task)
+                print(f"Deleted {toDelete}")
+                prompt()
+                return
+        print("Task not found, returning to main menu")
+        prompt()
+        return
+                
+        
 #sort by priority: high, low
 
 #sort by due date: closest, furthest
