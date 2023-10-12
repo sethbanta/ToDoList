@@ -1,5 +1,7 @@
 #Author Seth Banta
 
+#Define variables for use
+taskList = []
 #Define task object
 class Task:
     def __init__(self, title, description, priority, due_date):
@@ -12,23 +14,55 @@ class Task:
         return f"{self.title}, {self.description}, {self.priority}, {self.due_date}"
 
 #prompt user for input on what they want to do
-choice = input('Would you like to create, read, update, delete, sort or exit? (c/r/u/d/s/e)? ')
-match choice:
-    case "c":
-        print('create selected')
-    case "r":
-        print('read selected')
-    case "u":
-        print('update selected')
-    case "d":
-        print('delete selected')
-    case "s":
-        print('sort selected')
-    case _:
-        print('exit selected')
+def prompt():
+    choice = input('Would you like to create, read, update, delete, sort or exit? (c/r/u/d/s/e)? ')
+    match choice:
+        case "c":
+            print('create selected')
+            create()
+        case "r":
+            print('read selected')
+        case "u":
+            print('update selected')
+        case "d":
+            print('delete selected')
+        case "s":
+            print('sort selected')
+        case _:
+           print('exit selected')
     
 #create tasks
-
+def create():
+    #prompt user for task details
+    inputTitle = input("Please enter a task title: ")
+    inputDescription = input("Please enter a description: ")
+    inputPriority = input("Please enter a priority (1-5, 1 being highest, 5 being lowest): ")
+    inputDueDate = input("Please enter a due date (MM/DD/YY): ")
+    month = inputDueDate[0:2]
+    day = inputDueDate[3:5]
+    year = inputDueDate[6:8]
+    print(year)
+    #check if they entered stuff how we want
+    #if the title is left blank, return to menu
+    if(str(inputTitle) == None or str(inputTitle) == ""):
+        print("No title found, returning to main menu")
+        prompt()
+        #return   
+    #if the priority is less than 1, or more than 5, go back to main menu
+    elif((int(inputPriority) > 5 or int(inputPriority) < 1)):
+        print("Invalid priority entered, returning to main menu")
+        prompt()
+        return
+    #if the month is less than 1 or greater than 12, or the day is greater than 31 or less than 1, or the year is sooner than 2023 return to main menu
+    elif(int(month) > 12 or int(month) < 1 or int(day) > 31 or int(day) < 1 or int(year) < 23):
+        print("Invalid due date entered, return to main menu")
+        prompt()
+        return
+    task = Task(inputTitle, inputDescription, inputPriority, inputDueDate)
+    taskList.append(task)
+    print(taskList[0])
+    prompt()
+    
 #read tasks
 
 #update tasks
@@ -44,3 +78,6 @@ match choice:
 #save tasks to file
 
 #import tasks from file
+
+#main code
+prompt()
