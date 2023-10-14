@@ -93,7 +93,7 @@ def delete():
         return
                 
         
-#sort by priority: high, low
+#sort by priority: high to low
 def highSort():
     #start at index 0
     i = 0
@@ -118,8 +118,35 @@ def highSort():
         i = i+1
     print("Sorted high to low priority")
     prompt()
-    
-#sort by due date: closest, furthest
+
+#sory by priority: low to high
+def lowSort():
+    #start at index 0
+    i = 0
+    j = len(priorities)
+    for priority in range(i,j):
+        shrunkPriorities = priorities[i:j]
+        minPriority = 0
+        #grab min priority in the shrunk(recursive) priority list 
+        minPriority = min(shrunkPriorities)
+        minPriorityIndex = shrunkPriorities.index(minPriority) + i
+        #grab current indexes task data
+        oldTask = taskList[i]
+        oldPriority = priorities[i]
+        oldDate = dueDates[i]
+        #swap the indexes
+        taskList[i] = taskList[minPriorityIndex]
+        taskList[minPriorityIndex] = oldTask
+        priorities[i] = priorities[minPriorityIndex]
+        priorities[minPriorityIndex] = oldPriority
+        dueDates[i] = dueDates[minPriorityIndex]
+        dueDates[minPriorityIndex] = oldDate
+        i = i+1
+    print("Sorted low to high priority")
+    prompt()
+#sort by due date: closest to furthest
+
+#sort by due date: furthest to closest
 
 #sort by title alphabetically
 
@@ -161,7 +188,7 @@ def sort():
                 case "h":
                     highSort()
                 case "l":
-                    print("Sort by low")
+                    lowSort()
                 case _:
                     print("Invalid input")
                     sort()
