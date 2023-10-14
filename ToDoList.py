@@ -2,6 +2,8 @@
 
 #Define variables for use
 taskList = []
+priorities = []
+dueDates = []
 #Define task object
 class Task:
     def __init__(self, title, description, priority, due_date):
@@ -20,13 +22,15 @@ def prompt():
         case "c":
             create()
         case "r":
-            read()
+            for task in taskList:
+                print(task)
+            prompt()
         case "u":
             update()
         case "d":
             delete()
         case "s":
-            print('sort selected')
+            sort()
         case _:
            print('exit selected')
     
@@ -37,50 +41,17 @@ def create():
     inputDescription = input("Please enter a description: ")
     inputPriority = input("Please enter a priority (1-5, 1 being highest, 5 being lowest): ")
     inputDueDate = input("Please enter a due date (MM/DD/YY): ")
+    #check if the input is how we want
     check(inputTitle, inputPriority, inputDueDate)
+    #create the task and put it in a task list, a priority list, and a due date list for sorting later
     task = Task(inputTitle, inputDescription, inputPriority, inputDueDate)
     taskList.append(task)
+    print(f'{task.priority}')
+    deez = int(task.priority)
+    print(f'{deez}')
+    priorities.append(deez)
+    dueDates.append(task.due_date)
     prompt()
-    
-#read tasks
-def read():
-    choice = input("Would you like to print all, or in a sorted format? (p/s) ")
-    match choice:
-        case "p":
-            for task in taskList:
-                print(task)
-            prompt()
-        case "s":
-            sort = input("Sort by title, priority, or due date? (t/p/d)" )
-            match sort:
-                case "t":
-                    print("Sort by title")
-                case "p":
-                    highLow = input("Sort by highest or lowest priority? (h/l) ")
-                    match highLow:
-                        case "h":
-                            print("Sort by high")
-                        case "l":
-                            print("Sort by low")
-                        case _:
-                            print("Invalid input")
-                            read()
-                case "d":
-                    oldNew = input("Sort by oldest or newest tasks? (o/n) ")
-                    match oldNew:
-                        case "o":
-                            print("Sort by oldest")
-                        case "n":
-                            print("Sort by newest")
-                        case _:
-                            print("Invalid input")
-                            read()
-                case _:
-                    print("Invalid input")
-                    read()
-        case _:
-            print("Invalid input")
-            read()
             
 #update tasks
 def update():
@@ -123,7 +94,31 @@ def delete():
                 
         
 #sort by priority: high, low
-
+def highSort():
+    #start at index 0
+    i = 0
+    j = len(priorities)
+    for priority in range(i,j):
+        shrunkPriorities = priorities[i:j]
+        maxPriority = 0
+        #grab max priority in the shrunk(recursive) priority list 
+        maxPriority = max(shrunkPriorities)
+        maxPriorityIndex = shrunkPriorities.index(maxPriority) + i
+        #grab current indexes task data
+        oldTask = taskList[i]
+        oldPriority = priorities[i]
+        oldDate = dueDates[i]
+        #swap the indexes
+        taskList[i] = taskList[maxPriorityIndex]
+        taskList[maxPriorityIndex] = oldTask
+        priorities[i] = priorities[maxPriorityIndex]
+        priorities[maxPriorityIndex] = oldPriority
+        dueDates[i] = dueDates[maxPriorityIndex]
+        dueDates[maxPriorityIndex] = oldDate
+        i = i+1
+    print("Sorted high to low priority")
+    prompt()
+    
 #sort by due date: closest, furthest
 
 #sort by title alphabetically
@@ -154,5 +149,56 @@ def check(inputTitle, inputPriority, inputDueDate):
         prompt()
         return
 
+#function to ask what kind of sorting the user wants to do
+def sort():
+    type = input("Sort by title, priority, or due date? (t/p/d)" )
+    match type:
+        case "t":
+            print("Sort by title")
+        case "p":
+            highLow = input("Sort by highest or lowest priority? (h/l) ")
+            match highLow:
+                case "h":
+                    highSort()
+                case "l":
+                    print("Sort by low")
+                case _:
+                    print("Invalid input")
+                    sort()
+        case "d":
+            oldNew = input("Sort by oldest or newest tasks? (o/n) ")
+            match oldNew:
+                case "o":
+                    print("Sort by oldest")
+                case "n":
+                    print("Sort by newest")
+                case _:
+                    print("Invalid input")
+                    sort()
+        case _:
+            print("Invalid input")
+            sort()
+
 #main code
+#tasks for testing so i dont have to type them over and over
+task = Task("title", "desc", 2, "10/10/23")
+taskList.append(task)
+priorities.append(2)
+dueDates.append("10/10/23")
+task = Task("second", "task", 3, "10/11/23")
+taskList.append(task)
+priorities.append(3)
+dueDates.append("10/11/23")
+task = Task("third", "task", 1, "10/12/23")
+taskList.append(task)
+priorities.append(1)
+dueDates.append("10/12/23")
+task = Task("fourth", "task", 5, "10/13/23")
+taskList.append(task)
+priorities.append(5)
+dueDates.append("10/12/23")
+task = Task("fifth", "task", 4, "10/14/23")
+taskList.append(task)
+priorities.append(4)
+dueDates.append("10/12/23")
 prompt()
