@@ -46,11 +46,14 @@ def create():
     #create the task and put it in a task list, a priority list, and a due date list for sorting later
     task = Task(inputTitle, inputDescription, inputPriority, inputDueDate)
     taskList.append(task)
-    print(f'{task.priority}')
     deez = int(task.priority)
-    print(f'{deez}')
     priorities.append(deez)
-    dueDates.append(task.due_date)
+    month = task.due_date[0:2]
+    day = task.due_date[3:5]
+    year = task.due_date[6:8]
+    splitDate = f"{year}{month}{day}"
+    splitDate = int(splitDate)
+    dueDates.append(splitDate)
     prompt()
             
 #update tasks
@@ -144,7 +147,33 @@ def lowSort():
         i = i+1
     print("Sorted low to high priority")
     prompt()
+
 #sort by due date: closest to furthest
+def closeSort():
+    #start at index 0
+    i = 0
+    j = len(dueDates)
+    for dueDate in range(i,j):
+        #create recursive array
+        shrunkDates = dueDates[i:j]
+        minDate = 0
+        #grab "lowest" date, this should be the soonest
+        minDate = min(shrunkDates)
+        minDateIndex = shrunkDates.index(minDate) + i
+        #grab current indexes data
+        oldTask = taskList[i]
+        oldPriority = priorities[i]
+        oldDate = dueDates[i]
+        #swap the indexes
+        taskList[i] = taskList[minDateIndex]
+        taskList[minDateIndex] = oldTask
+        priorities[i] = priorities[minDateIndex]
+        priorities[minDateIndex] = oldPriority
+        dueDates[i] = dueDates[minDateIndex]
+        dueDates[minDateIndex] = oldDate
+        i = i+1
+    print("Sorted by soonest to oldest due date")
+    prompt()
 
 #sort by due date: furthest to closest
 
@@ -178,7 +207,7 @@ def check(inputTitle, inputPriority, inputDueDate):
 
 #function to ask what kind of sorting the user wants to do
 def sort():
-    type = input("Sort by title, priority, or due date? (t/p/d)" )
+    type = input("Sort by title, priority, or due date? (t/p/d) " )
     match type:
         case "t":
             print("Sort by title")
@@ -198,7 +227,7 @@ def sort():
                 case "o":
                     print("Sort by oldest")
                 case "n":
-                    print("Sort by newest")
+                    closeSort()
                 case _:
                     print("Invalid input")
                     sort()
@@ -211,21 +240,46 @@ def sort():
 task = Task("title", "desc", 2, "10/10/23")
 taskList.append(task)
 priorities.append(2)
-dueDates.append("10/10/23")
+month = task.due_date[0:2]
+day = task.due_date[3:5]
+year = task.due_date[6:8]
+splitDate = f"{year}{month}{day}"
+splitDate = int(splitDate)
+dueDates.append(splitDate)
 task = Task("second", "task", 3, "10/11/23")
 taskList.append(task)
 priorities.append(3)
-dueDates.append("10/11/23")
+month = task.due_date[0:2]
+day = task.due_date[3:5]
+year = task.due_date[6:8]
+splitDate = f"{year}{month}{day}"
+splitDate = int(splitDate)
+dueDates.append(splitDate)
 task = Task("third", "task", 1, "10/12/23")
 taskList.append(task)
 priorities.append(1)
-dueDates.append("10/12/23")
+month = task.due_date[0:2]
+day = task.due_date[3:5]
+year = task.due_date[6:8]
+splitDate = f"{year}{month}{day}"
+splitDate = int(splitDate)
+dueDates.append(splitDate)
 task = Task("fourth", "task", 5, "10/13/23")
 taskList.append(task)
 priorities.append(5)
-dueDates.append("10/12/23")
+month = task.due_date[0:2]
+day = task.due_date[3:5]
+year = task.due_date[6:8]
+splitDate = f"{year}{month}{day}"
+splitDate = int(splitDate)
+dueDates.append(splitDate)
 task = Task("fifth", "task", 4, "10/14/23")
 taskList.append(task)
 priorities.append(4)
-dueDates.append("10/12/23")
+month = task.due_date[0:2]
+day = task.due_date[3:5]
+year = task.due_date[6:8]
+splitDate = f"{year}{month}{day}"
+splitDate = int(splitDate)
+dueDates.append(splitDate)
 prompt()
