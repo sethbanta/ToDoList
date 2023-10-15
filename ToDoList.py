@@ -176,6 +176,31 @@ def closeSort():
     prompt()
 
 #sort by due date: furthest to closest
+def farSort():
+    #start at index 0
+    i = 0
+    j = len(dueDates)
+    for dueDate in range(i,j):
+        #create recursive array
+        shrunkDates = dueDates[i:j]
+        maxDate = 0
+        #grab "lowest" date, this should be the soonest
+        maxDate = max(shrunkDates)
+        maxDateIndex = shrunkDates.index(maxDate) + i
+        #grab current indexes data
+        oldTask = taskList[i]
+        oldPriority = priorities[i]
+        oldDate = dueDates[i]
+        #swap the indexes
+        taskList[i] = taskList[maxDateIndex]
+        taskList[maxDateIndex] = oldTask
+        priorities[i] = priorities[maxDateIndex]
+        priorities[maxDateIndex] = oldPriority
+        dueDates[i] = dueDates[maxDateIndex]
+        dueDates[maxDateIndex] = oldDate
+        i = i+1
+    print("Sorted by oldest to soonest due date")
+    prompt()
 
 #sort by title alphabetically
 
@@ -225,7 +250,7 @@ def sort():
             oldNew = input("Sort by oldest or newest tasks? (o/n) ")
             match oldNew:
                 case "o":
-                    print("Sort by oldest")
+                    farSort()
                 case "n":
                     closeSort()
                 case _:
