@@ -5,6 +5,7 @@ taskList = []
 priorities = []
 dueDates = []
 titles = []
+going = 1
 #Define task object
 class Task:
     def __init__(self, title, description, priority, due_date):
@@ -25,7 +26,6 @@ def prompt():
         case "r":
             for task in taskList:
                 print(task)
-            prompt()
         case "u":
             update()
         case "d":
@@ -34,6 +34,7 @@ def prompt():
             sort()
         case _:
            print('exit selected')
+           exit()
     
 #create tasks
 def create():
@@ -56,7 +57,6 @@ def create():
     splitDate = f"{year}{month}{day}"
     splitDate = int(splitDate)
     dueDates.append(splitDate)
-    prompt()
             
 #update tasks
 def update():
@@ -74,28 +74,27 @@ def update():
             check(updateTitle, updatePriority, updateDueDate)
             updatedTask = Task(updateTitle, updateDescription, updatePriority, updateDueDate)
             taskList[index] = updatedTask
-            prompt()
+            priorities[index] = int(updatePriority)
+            month = updateDueDate[0:2]
+            day = updateDueDate[3:5]
+            year = updateDueDate[6:8]
+            splitDate = f"{year}{month}{day}"
+            splitDate = int(splitDate)
+            dueDates[index] = splitDate
+            titles[index] = updateTitle
     except:
         print("Task not found")
-        prompt()
         
 #delete tasks
 def delete():
     toDelete = input("Please enter the name of the task you would like to delete: ")
     if(toDelete == None or toDelete == ""):
         print("Invalid task provided, returning to menu")
-        prompt()
-        return
     else:
         for task in taskList:
             if(task.title == toDelete):
                 taskList.remove(task)
                 print(f"Deleted {toDelete}")
-                prompt()
-                return
-        print("Task not found, returning to main menu")
-        prompt()
-        return
                 
         
 #sort by priority: high to low
@@ -125,7 +124,6 @@ def highSort():
         titles[maxPriorityIndex] = oldTitle
         i = i+1
     print("Sorted high to low priority")
-    prompt()
 
 #sory by priority: low to high
 def lowSort():
@@ -154,7 +152,6 @@ def lowSort():
         titles[minPriorityIndex] = oldTitle
         i = i+1
     print("Sorted low to high priority")
-    prompt()
 
 #sort by due date: closest to furthest
 def closeSort():
@@ -184,7 +181,6 @@ def closeSort():
         titles[minDateIndex] = oldTitle
         i = i+1
     print("Sorted by soonest to oldest due date")
-    prompt()
 
 #sort by due date: furthest to closest
 def farSort():
@@ -214,7 +210,6 @@ def farSort():
         titles[maxDateIndex] = oldTitle
         i = i+1
     print("Sorted by oldest to soonest due date")
-    prompt()
 
 #sort by title alphabetically
 def titleSort():
@@ -243,7 +238,6 @@ def titleSort():
         titles[minTitleIndex] = oldTitle
         i = i+1
     print("Sorted alphabetically")
-    prompt()
 
 #save tasks to file
 
@@ -260,18 +254,12 @@ def check(inputTitle, inputPriority, inputDueDate):
     #if the title is left blank, return to menu
     if(str(inputTitle) == None or str(inputTitle) == ""):
         print("No title found, returning to main menu")
-        prompt()
-        return   
     #if the priority is less than 1, or more than 5, go back to main menu
     elif((int(inputPriority) > 5 or int(inputPriority) < 1)):
         print("Invalid priority entered, returning to main menu")
-        prompt()
-        return
     #if the month is less than 1 or greater than 12, or the day is greater than 31 or less than 1, or the year is sooner than 2023 return to main menu
     elif(int(month) > 12 or int(month) < 1 or int(day) > 31 or int(day) < 1 or int(year) < 23):
         print("Invalid due date entered, return to main menu")
-        prompt()
-        return
 
 #function to ask what kind of sorting the user wants to do
 def sort():
@@ -357,4 +345,5 @@ splitDate = f"{year}{month}{day}"
 splitDate = int(splitDate)
 dueDates.append(splitDate)
 titles.append(task.title)
-prompt()
+while (going):
+    prompt()
