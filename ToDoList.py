@@ -4,6 +4,7 @@
 taskList = []
 priorities = []
 dueDates = []
+titles = []
 #Define task object
 class Task:
     def __init__(self, title, description, priority, due_date):
@@ -51,6 +52,7 @@ def create():
     month = task.due_date[0:2]
     day = task.due_date[3:5]
     year = task.due_date[6:8]
+    titles.append(inputTitle)
     splitDate = f"{year}{month}{day}"
     splitDate = int(splitDate)
     dueDates.append(splitDate)
@@ -111,6 +113,7 @@ def highSort():
         oldTask = taskList[i]
         oldPriority = priorities[i]
         oldDate = dueDates[i]
+        oldTitle = titles[i]
         #swap the indexes
         taskList[i] = taskList[maxPriorityIndex]
         taskList[maxPriorityIndex] = oldTask
@@ -118,6 +121,8 @@ def highSort():
         priorities[maxPriorityIndex] = oldPriority
         dueDates[i] = dueDates[maxPriorityIndex]
         dueDates[maxPriorityIndex] = oldDate
+        titles[i] = titles[maxPriorityIndex]
+        titles[maxPriorityIndex] = oldTitle
         i = i+1
     print("Sorted high to low priority")
     prompt()
@@ -137,6 +142,7 @@ def lowSort():
         oldTask = taskList[i]
         oldPriority = priorities[i]
         oldDate = dueDates[i]
+        oldTitle = titles[i]
         #swap the indexes
         taskList[i] = taskList[minPriorityIndex]
         taskList[minPriorityIndex] = oldTask
@@ -144,6 +150,8 @@ def lowSort():
         priorities[minPriorityIndex] = oldPriority
         dueDates[i] = dueDates[minPriorityIndex]
         dueDates[minPriorityIndex] = oldDate
+        titles[i] = titles[minPriorityIndex]
+        titles[minPriorityIndex] = oldTitle
         i = i+1
     print("Sorted low to high priority")
     prompt()
@@ -164,6 +172,7 @@ def closeSort():
         oldTask = taskList[i]
         oldPriority = priorities[i]
         oldDate = dueDates[i]
+        oldTitle = titles[i]
         #swap the indexes
         taskList[i] = taskList[minDateIndex]
         taskList[minDateIndex] = oldTask
@@ -171,6 +180,8 @@ def closeSort():
         priorities[minDateIndex] = oldPriority
         dueDates[i] = dueDates[minDateIndex]
         dueDates[minDateIndex] = oldDate
+        titles[i] = titles[minDateIndex]
+        titles[minDateIndex] = oldTitle
         i = i+1
     print("Sorted by soonest to oldest due date")
     prompt()
@@ -184,13 +195,14 @@ def farSort():
         #create recursive array
         shrunkDates = dueDates[i:j]
         maxDate = 0
-        #grab "lowest" date, this should be the soonest
+        #grab "highest" date, this should be the furthest
         maxDate = max(shrunkDates)
         maxDateIndex = shrunkDates.index(maxDate) + i
         #grab current indexes data
         oldTask = taskList[i]
         oldPriority = priorities[i]
         oldDate = dueDates[i]
+        oldTitle = titles[i]
         #swap the indexes
         taskList[i] = taskList[maxDateIndex]
         taskList[maxDateIndex] = oldTask
@@ -198,15 +210,46 @@ def farSort():
         priorities[maxDateIndex] = oldPriority
         dueDates[i] = dueDates[maxDateIndex]
         dueDates[maxDateIndex] = oldDate
+        titles[i] = titles[maxDateIndex]
+        titles[maxDateIndex] = oldTitle
         i = i+1
     print("Sorted by oldest to soonest due date")
     prompt()
 
 #sort by title alphabetically
+def titleSort():
+    #start at index 0
+    i = 0
+    j = len(titles)
+    for title in range(i,j):
+        shrunkTitles = titles[i:j]
+        minTitle = 0
+        #grab min title in the shrunk(recursive) title list 
+        minTitle = min(shrunkTitles)
+        minTitleIndex = shrunkTitles.index(minTitle) + i
+        #grab current indexes task data
+        oldTask = taskList[i]
+        oldPriority = priorities[i]
+        oldDate = dueDates[i]
+        oldTitle = titles[i]
+        #swap the indexes
+        taskList[i] = taskList[minTitleIndex]
+        taskList[minTitleIndex] = oldTask
+        priorities[i] = priorities[minTitleIndex]
+        priorities[minTitleIndex] = oldPriority
+        dueDates[i] = dueDates[minTitleIndex]
+        dueDates[minTitleIndex] = oldDate
+        titles[i] = titles[minTitleIndex]
+        titles[minTitleIndex] = oldTitle
+        i = i+1
+    print("Sorted alphabetically")
+    prompt()
 
 #save tasks to file
 
+
 #import tasks from file
+
 
 #check function for checking values entered for a task
 def check(inputTitle, inputPriority, inputDueDate):
@@ -235,7 +278,7 @@ def sort():
     type = input("Sort by title, priority, or due date? (t/p/d) " )
     match type:
         case "t":
-            print("Sort by title")
+            titleSort()
         case "p":
             highLow = input("Sort by highest or lowest priority? (h/l) ")
             match highLow:
@@ -260,6 +303,8 @@ def sort():
             print("Invalid input")
             sort()
 
+def getTitle(task):
+    return task.title
 #main code
 #tasks for testing so i dont have to type them over and over
 task = Task("title", "desc", 2, "10/10/23")
@@ -271,6 +316,7 @@ year = task.due_date[6:8]
 splitDate = f"{year}{month}{day}"
 splitDate = int(splitDate)
 dueDates.append(splitDate)
+titles.append(task.title)
 task = Task("second", "task", 3, "10/11/23")
 taskList.append(task)
 priorities.append(3)
@@ -280,6 +326,7 @@ year = task.due_date[6:8]
 splitDate = f"{year}{month}{day}"
 splitDate = int(splitDate)
 dueDates.append(splitDate)
+titles.append(task.title)
 task = Task("third", "task", 1, "10/12/23")
 taskList.append(task)
 priorities.append(1)
@@ -289,6 +336,7 @@ year = task.due_date[6:8]
 splitDate = f"{year}{month}{day}"
 splitDate = int(splitDate)
 dueDates.append(splitDate)
+titles.append(task.title)
 task = Task("fourth", "task", 5, "10/13/23")
 taskList.append(task)
 priorities.append(5)
@@ -298,6 +346,7 @@ year = task.due_date[6:8]
 splitDate = f"{year}{month}{day}"
 splitDate = int(splitDate)
 dueDates.append(splitDate)
+titles.append(task.title)
 task = Task("fifth", "task", 4, "10/14/23")
 taskList.append(task)
 priorities.append(4)
@@ -307,4 +356,5 @@ year = task.due_date[6:8]
 splitDate = f"{year}{month}{day}"
 splitDate = int(splitDate)
 dueDates.append(splitDate)
+titles.append(task.title)
 prompt()
