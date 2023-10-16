@@ -1,4 +1,5 @@
 #Author Seth Banta
+import json
 
 #Define variables for use
 taskList = []
@@ -62,6 +63,22 @@ def create():
     day = task.due_date[3:5]
     year = task.due_date[6:8]
     titles.append(inputTitle)
+    splitDate = f"{year}{month}{day}"
+    splitDate = int(splitDate)
+    dueDates.append(splitDate)
+
+def createFromFile(title, desc, priority, dueDate):
+    #check if the input is how we want
+    check(title, priority, dueDate)
+    #create the task and put it in a task list, a priority list, and a due date list for sorting later
+    task = Task(title, desc, priority, dueDate)
+    taskList.append(task)
+    deez = int(task.priority)
+    priorities.append(deez)
+    month = task.due_date[0:2]
+    day = task.due_date[3:5]
+    year = task.due_date[6:8]
+    titles.append(title)
     splitDate = f"{year}{month}{day}"
     splitDate = int(splitDate)
     dueDates.append(splitDate)
@@ -250,15 +267,16 @@ def titleSort():
 #save tasks to file
 def exportTasks():
     #begin writing to a string for JSON format
-    outputStr = "[\n"
+    outputStr = "{\n"
+    outputStr += "\t\"tasks\": [\n"
     #for every task in the task list, append it onto the string
     for task in taskList:
-        outputStr += "\t{\n"
-        outputStr += f"\t\t\"title\":\"{task.title}\",\n"
-        outputStr += f"\t\t\"description\":\"{task.description}\",\n"
-        outputStr += f"\t\t\"priority\":\"{task.priority}\",\n"
-        outputStr += f"\t\t\"due date\":\"{task.due_date}\",\n"
-        outputStr += "\t},\n"
+        outputStr += "\t\t{\n"
+        outputStr += f"\t\t\t\"title\":\"{task.title}\",\n"
+        outputStr += f"\t\t\t\"description\":\"{task.description}\",\n"
+        outputStr += f"\t\t\t\"priority\":\"{task.priority}\",\n"
+        outputStr += f"\t\t\t\"due date\":\"{task.due_date}\"\n"
+        outputStr += "\t\t},\n"
     #turn the output string into a list so we can replace the comma on the last closing curly bracket
     outputStrList = list(outputStr)
     #grab the length of the string, then subtract by two so that we remove the comma, instead of the new line character
@@ -266,13 +284,33 @@ def exportTasks():
     outputStrList[strLen - 2] = ""
     #join the list into an empty string so we can export
     outputStr = "".join(outputStrList)
-    outputStr += "]"
+    outputStr += "\t]\n"
+    outputStr += "}"
     #writes output string to a file name SavedTasks.json, if one doesn't already exist it will be created
     with open("SavedTasks.json", "w") as outfile:
             outfile.write(outputStr)
 
 #import tasks from file
-
+def importTasks():
+    try:
+        #open out saved tasks file if it exists
+        file = open('SavedTasks.json')
+        taskList.clear()
+        priorities.clear()
+        dueDates.clear()
+        titles.clear()
+        data = json.load(file)
+        for i in data['tasks']:
+            taskString = str(i)
+            splitString = taskString.split('\'')
+            taskTitle = splitString[3]
+            taskDesc = splitString[7]
+            taskPriority = splitString[11]
+            taskDueDate = splitString[15]
+            createFromFile(taskTitle, taskDesc, taskPriority, taskDueDate)
+        file.close()
+    except:
+        print('')
 
 #check function for checking values entered for a task
 def check(inputTitle, inputPriority, inputDueDate):
@@ -324,55 +362,11 @@ def getTitle(task):
     return task.title
 #main code
 #tasks for testing so i dont have to type them over and over
-task = Task("title", "desc", 2, "10/10/23")
-taskList.append(task)
-priorities.append(2)
-month = task.due_date[0:2]
-day = task.due_date[3:5]
-year = task.due_date[6:8]
-splitDate = f"{year}{month}{day}"
-splitDate = int(splitDate)
-dueDates.append(splitDate)
-titles.append(task.title)
-task = Task("second", "task", 3, "10/11/23")
-taskList.append(task)
-priorities.append(3)
-month = task.due_date[0:2]
-day = task.due_date[3:5]
-year = task.due_date[6:8]
-splitDate = f"{year}{month}{day}"
-splitDate = int(splitDate)
-dueDates.append(splitDate)
-titles.append(task.title)
-task = Task("third", "task", 1, "10/12/23")
-taskList.append(task)
-priorities.append(1)
-month = task.due_date[0:2]
-day = task.due_date[3:5]
-year = task.due_date[6:8]
-splitDate = f"{year}{month}{day}"
-splitDate = int(splitDate)
-dueDates.append(splitDate)
-titles.append(task.title)
-task = Task("fourth", "task", 5, "10/13/23")
-taskList.append(task)
-priorities.append(5)
-month = task.due_date[0:2]
-day = task.due_date[3:5]
-year = task.due_date[6:8]
-splitDate = f"{year}{month}{day}"
-splitDate = int(splitDate)
-dueDates.append(splitDate)
-titles.append(task.title)
-task = Task("fifth", "task", 4, "10/14/23")
-taskList.append(task)
-priorities.append(4)
-month = task.due_date[0:2]
-day = task.due_date[3:5]
-year = task.due_date[6:8]
-splitDate = f"{year}{month}{day}"
-splitDate = int(splitDate)
-dueDates.append(splitDate)
-titles.append(task.title)
+createFromFile("title", "desc", 2, "10/10/23")
+createFromFile("second", "task", 3, "10/11/23")
+createFromFile("third", "task", 1, "10/12/23")
+createFromFile("fourth", "task", 5, "10/13/23")
+createFromFile("fifth", "task", 4, "10/14/23")
+importTasks()
 while (going):
     prompt()
