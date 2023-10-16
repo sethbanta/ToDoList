@@ -33,8 +33,16 @@ def prompt():
         case "s":
             sort()
         case _:
-           print('exit selected')
-           exit()
+           saveQuestion = input("Save task list? (y/n) ")
+           match saveQuestion:
+                case "y":
+                   print("Saving changes...")
+                   exportTasks()
+                   exit()
+                case _:
+                   print("Exiting without saving...")
+                   exit()
+                   
     
 #create tasks
 def create():
@@ -240,7 +248,28 @@ def titleSort():
     print("Sorted alphabetically")
 
 #save tasks to file
-
+def exportTasks():
+    #begin writing to a string for JSON format
+    outputStr = "[\n"
+    #for every task in the task list, append it onto the string
+    for task in taskList:
+        outputStr += "\t{\n"
+        outputStr += f"\t\t\"title\":\"{task.title}\",\n"
+        outputStr += f"\t\t\"description\":\"{task.description}\",\n"
+        outputStr += f"\t\t\"priority\":\"{task.priority}\",\n"
+        outputStr += f"\t\t\"due date\":\"{task.due_date}\",\n"
+        outputStr += "\t},\n"
+    #turn the output string into a list so we can replace the comma on the last closing curly bracket
+    outputStrList = list(outputStr)
+    #grab the length of the string, then subtract by two so that we remove the comma, instead of the new line character
+    strLen = len(outputStrList)
+    outputStrList[strLen - 2] = ""
+    #join the list into an empty string so we can export
+    outputStr = "".join(outputStrList)
+    outputStr += "]"
+    #writes output string to a file name SavedTasks.json, if one doesn't already exist it will be created
+    with open("SavedTasks.json", "w") as outfile:
+            outfile.write(outputStr)
 
 #import tasks from file
 
