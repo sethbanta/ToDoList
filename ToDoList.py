@@ -97,8 +97,8 @@ def delete():
                 print(f"Deleted {toDelete}")
                 
         
-#sort by priority: high to low
-def highSort():
+#sort by priority: low to high
+def lowSort():
     #start at index 0
     i = 0
     j = len(priorities)
@@ -125,8 +125,8 @@ def highSort():
         i = i+1
     print("Sorted high to low priority")
 
-#sory by priority: low to high
-def lowSort():
+#sory by priority: high to low
+def highSort():
     #start at index 0
     i = 0
     j = len(priorities)
